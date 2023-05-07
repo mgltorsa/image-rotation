@@ -1,0 +1,6 @@
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/ScaleImage.dir
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/RotateImage.dir
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/MPIRotateImage.dir
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/HelloWorld.dir
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/edit_cache.dir
+/home/mgltorsa/workspace/arch-parallel-computer/course-project/CMakeFiles/rebuild_cache.dir
