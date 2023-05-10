@@ -29,10 +29,12 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    time_t startTime = time(nullptr);
+    time_t startTime, endTime;
+
+    time(&startTime);
 
     // Load the image
-    Mat image = imread(argv[1], IMREAD_COLOR);
+    Mat image = imread(argv[1], IMREAD_REDUCED_COLOR_8);
 
     // Rotate the image
     Point2f center(image.cols / 2.0F, image.rows / 2.0F);
@@ -53,9 +55,9 @@ int main(int argc, char **argv)
     // Save the rotated image
     imwrite(argv[2], rotated_image);
 
-    time_t endTime = time(nullptr);
-    double elapsedTime = difftime(endTime, startTime);
+    time(&endTime);
+    time_t elapsedTime = endTime - startTime;
 
-    printf("serial;%s;%f,%f\n", argv[1], angle, elapsedTime);
+    printf("serial;%s;%f;%ld\n", argv[1], angle, elapsedTime);
     return 0;
 }

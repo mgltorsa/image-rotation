@@ -2,3 +2,8 @@ james_webb.png
 hubble_image.png
 output_images/**
 out.csv
+hubble_2_image.tif
+bin/**
+CMakeFiles/**
+cmake_install.cmake
+CMakeCache.txt

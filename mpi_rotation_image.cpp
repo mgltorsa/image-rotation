@@ -114,12 +114,12 @@ int main(int argc, char **argv)
     int cols;
     int rows;
     Size image_size;
-
     Mat image;
 
     if (rank == 0)
     {
-        image = imread(argv[1], IMREAD_COLOR);
+
+        image = imread(argv[1], IMREAD_REDUCED_COLOR_8);
 
         if (image.empty())
         {
@@ -139,7 +139,6 @@ int main(int argc, char **argv)
 
     if (rank == 0)
     {
-
         int rows = image_size.height;
         int rows_per_process = ceil(rows / (double)(size - 1));
 
@@ -169,53 +168,55 @@ int main(int argc, char **argv)
         Point2f new_centers[size];
         Point2f originalCenter(output.cols / 2.0f, output.rows / 2.0f);
 
-        for (int i = 1; i < size; i++)
-        {
-            Size chunk_size;
-            int chunk_step;
-            MPI_Recv(&chunk_size, 2, MPI_INT, i, TAG_CHUNK, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&chunk_step, 1, MPI_INT, i, TAG_IMAGE_STEP, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        // for (int i = 1; i < size; i++)
+        // {
+        // Size chunk_size;
+        // int chunk_step;
+        // MPI_Recv(&chunk_size, 2, MPI_INT, i, TAG_CHUNK, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        // MPI_Recv(&chunk_step, 1, MPI_INT, i, TAG_IMAGE_STEP, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-            // printf("Recv chunk size - w:%d h:%d s:%d from process#%d\n", chunk_size.width, chunk_size.height, chunk_step, i);
+        // printf("Recv chunk size - w:%d h:%d s:%d from process#%d\n", chunk_size.width, chunk_size.height, chunk_step, i);
 
-            Mat rotated_chunk(chunk_size, image.type(), chunk_step);
-            MPI_Recv(rotated_chunk.ptr(), chunk_size.height * chunk_step, MPI_UNSIGNED_CHAR, i, TAG_IMAGE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            // printf("recv chunk from process: %d. chunk_rows:%d chunk_cols:%d\n", i, rotated_chunk.rows, rotated_chunk.cols);
+        // Mat rotated_chunk(chunk_size, image.type(), chunk_step);
+        // MPI_Recv(rotated_chunk.ptr(), chunk_size.height * chunk_step, MPI_UNSIGNED_CHAR, i, TAG_IMAGE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        // printf("recv chunk from process: %d. chunk_rows:%d chunk_cols:%d\n", i, rotated_chunk.rows, rotated_chunk.cols);
 
-            imwrite(string(argv[2]) + "/process-" + to_string(i) + ".png", rotated_chunk);
+        // imwrite(string(argv[2]) + "/process-" + to_string(i) + ".png", rotated_chunk);
 
-            // int *coordinates = calculate_out_coordinates(output.cols, output.rows, rotated_chunk.cols, rotated_chunk.rows, angle);
+        // int *coordinates = calculate_out_coordinates(output.cols, output.rows, rotated_chunk.cols, rotated_chunk.rows, angle);
 
-            // int out_x = coordinates[0];
-            // int out_y = coordinates[1];
+        // int out_x = coordinates[0];
+        // int out_y = coordinates[1];
 
-            // printf("chunk: %d, outx: %d outy: %d \n", i, out_x, out_y);
-            chunks[i - 1] = rotated_chunk;
-            cv::Mat mask;
-            cv::compare(rotated_chunk, cv::Scalar(0, 0, 0), mask, cv::CMP_NE);
-            masks[i - 1] = mask;
+        // printf("chunk: %d, outx: %d outy: %d \n", i, out_x, out_y);
 
-            if (i - 1 == 0)
-            {
-                new_centers[i - 1] = Point2f(abs(output.size().width - rotated_chunk.size().width), 0);
-            }
+        // CHUNKS PROCESSING
+        // chunks[i - 1] = rotated_chunk;
+        // cv::Mat mask;
+        // cv::compare(rotated_chunk, cv::Scalar(0, 0, 0), mask, cv::CMP_NE);
+        // masks[i - 1] = mask;
 
-            // Root process does not rotate
-            else if ((i - 1) == (size - 2))
-            {
-                new_centers[i - 1] = Point2f(0, new_centers[0].x);
-            }
-            else
-            {
-                new_centers[i - 1] = Point2f(new_centers[0].x / i, new_centers[0].x / i);
-            }
+        // if (i - 1 == 0)
+        // {
+        //     new_centers[i - 1] = Point2f(abs(output.size().width - rotated_chunk.size().width), 0);
+        // }
 
-            if (angle == 45)
-            {
-                chunks[i - 1]
-                    .copyTo(output(cv::Rect(new_centers[i - 1].x, new_centers[i - 1].y, chunks[i - 1].cols, chunks[i - 1].rows)), masks[i - 1]);
-            }
-        }
+        // // Root process does not rotate
+        // else if ((i - 1) == (size - 2))
+        // {
+        //     new_centers[i - 1] = Point2f(0, new_centers[0].x);
+        // }
+        // else
+        // {
+        //     new_centers[i - 1] = Point2f(new_centers[0].x / i, new_centers[0].x / i);
+        // }
+
+        // if (angle == 45)
+        // {
+        //     chunks[i - 1]
+        //         .copyTo(output(cv::Rect(new_centers[i - 1].x, new_centers[i - 1].y, chunks[i - 1].cols, chunks[i - 1].rows)), masks[i - 1]);
+        // }
+        // }
 
         // printf("New center0 x:%f, y:%f\n", new_centers[0].x, new_centers[0].y);
         // printf("New center1 x:%f, y:%f\n", new_centers[1].x, new_centers[1].y);
@@ -228,7 +229,7 @@ int main(int argc, char **argv)
 
         // printf("Process#0 recv image\n");
 
-        imwrite(string(argv[2]) + "/" + string(argv[1]), output);
+        // imwrite(string(argv[2]) + "/" + string(argv[1]), output);
 
         // cout << "Image rotated successfully" << endl;
     }
@@ -252,18 +253,21 @@ int main(int argc, char **argv)
 
         // imwrite("partial-2-" + to_string(rank) + string(argv[2]), output);
 
-        rows_to_process = output.rows;
-        int cols_to_process = output.cols;
-        int chunk_type = output.type();
-        int chunk_step = output.step;
-        Size chunk_size = output.size();
+        // rows_to_process = output.rows;
+        // int cols_to_process = output.cols;
+        // int chunk_type = output.type();
+        // int chunk_step = output.step;
+        // Size chunk_size = output.size();
 
         // printf("send w:%d h:%d s:%d, process#%d\n", chunk_size.width, chunk_size.height, chunk_step, rank);
 
-        MPI_Send(&chunk_size, 2, MPI_INT, 0, TAG_CHUNK, MPI_COMM_WORLD);
-        MPI_Send(&chunk_step, 1, MPI_INT, 0, TAG_IMAGE_STEP, MPI_COMM_WORLD);
+        // MPI_Send(&chunk_size, 2, MPI_INT, 0, TAG_CHUNK, MPI_COMM_WORLD);
+        // MPI_Send(&chunk_step, 1, MPI_INT, 0, TAG_IMAGE_STEP, MPI_COMM_WORLD);
 
-        MPI_Send(output.ptr(), chunk_size.height * output.step, MPI_UNSIGNED_CHAR, 0, TAG_IMAGE, MPI_COMM_WORLD);
+        // MPI_Send(output.ptr(), chunk_size.height * output.step, MPI_UNSIGNED_CHAR, 0, TAG_IMAGE, MPI_COMM_WORLD);
+
+        imwrite(string(argv[2]) + "/process-" + to_string(rank) + ".png", output);
+
         // printf("Sent chunk from process#%d\n", rank);
     }
 
@@ -276,7 +280,8 @@ int main(int argc, char **argv)
     // Print the elapsed time
     if (rank == 0)
     {
-        printf("mpi-%d;%s;%f;%f\n", size, argv[1], angle, elapsedTime);
+        // printf("mpi-%d;%s;%2.f;%f\n", size, argv[1], angle, elapsedTime);
+        printf("mpi-%d-no-back;%s;%2.f;%f\n", size, argv[1], angle, elapsedTime);
     }
 
     MPI_Finalize();
