@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     Size image_size;
     Mat image;
 
-    image = imread(argv[1], IMREAD_UNCHANGED);
+    image = imread(argv[1], IMREAD_REDUCED_COLOR_8);
 
     if (image.empty())
     {
