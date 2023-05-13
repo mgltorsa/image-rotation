@@ -156,6 +156,19 @@ MPIRotateImage/fast:
 .PHONY : MPIRotateImage/fast
 
 #=============================================================================
+# Target rules for targets named MPIOptimizedRotateImage
+
+# Build rule for target.
+MPIOptimizedRotateImage: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 MPIOptimizedRotateImage
+.PHONY : MPIOptimizedRotateImage
+
+# fast build rule for target.
+MPIOptimizedRotateImage/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MPIOptimizedRotateImage.dir/build.make CMakeFiles/MPIOptimizedRotateImage.dir/build
+.PHONY : MPIOptimizedRotateImage/fast
+
+#=============================================================================
 # Target rules for targets named HelloWorld
 
 # Build rule for target.
@@ -216,6 +229,30 @@ mpi_rotation_image.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MPIRotateImage.dir/build.make CMakeFiles/MPIRotateImage.dir/mpi_rotation_image.cpp.s
 .PHONY : mpi_rotation_image.cpp.s
 
+mpi_rotation_image_optimized.o: mpi_rotation_image_optimized.cpp.o
+.PHONY : mpi_rotation_image_optimized.o
+
+# target to build an object file
+mpi_rotation_image_optimized.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MPIOptimizedRotateImage.dir/build.make CMakeFiles/MPIOptimizedRotateImage.dir/mpi_rotation_image_optimized.cpp.o
+.PHONY : mpi_rotation_image_optimized.cpp.o
+
+mpi_rotation_image_optimized.i: mpi_rotation_image_optimized.cpp.i
+.PHONY : mpi_rotation_image_optimized.i
+
+# target to preprocess a source file
+mpi_rotation_image_optimized.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MPIOptimizedRotateImage.dir/build.make CMakeFiles/MPIOptimizedRotateImage.dir/mpi_rotation_image_optimized.cpp.i
+.PHONY : mpi_rotation_image_optimized.cpp.i
+
+mpi_rotation_image_optimized.s: mpi_rotation_image_optimized.cpp.s
+.PHONY : mpi_rotation_image_optimized.s
+
+# target to generate assembly for a file
+mpi_rotation_image_optimized.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MPIOptimizedRotateImage.dir/build.make CMakeFiles/MPIOptimizedRotateImage.dir/mpi_rotation_image_optimized.cpp.s
+.PHONY : mpi_rotation_image_optimized.cpp.s
+
 rotation_image.o: rotation_image.cpp.o
 .PHONY : rotation_image.o
 
@@ -273,6 +310,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... HelloWorld"
+	@echo "... MPIOptimizedRotateImage"
 	@echo "... MPIRotateImage"
 	@echo "... RotateImage"
 	@echo "... ScaleImage"
@@ -282,6 +320,9 @@ help:
 	@echo "... mpi_rotation_image.o"
 	@echo "... mpi_rotation_image.i"
 	@echo "... mpi_rotation_image.s"
+	@echo "... mpi_rotation_image_optimized.o"
+	@echo "... mpi_rotation_image_optimized.i"
+	@echo "... mpi_rotation_image_optimized.s"
 	@echo "... rotation_image.o"
 	@echo "... rotation_image.i"
 	@echo "... rotation_image.s"

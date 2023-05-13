@@ -9,6 +9,9 @@
         "ostream": "cpp",
         "list": "cpp",
         "unordered_map": "cpp",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "*.tcc": "cpp",
+        "iosfwd": "cpp",
+        "ctime": "cpp"
     }
 }

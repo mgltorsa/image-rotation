@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     time(&startTime);
 
     // Load the image
-    Mat image = imread(argv[1], IMREAD_REDUCED_COLOR_8);
+    Mat image = imread(argv[1], IMREAD_UNCHANGED);
 
     // Rotate the image
     Point2f center(image.cols / 2.0F, image.rows / 2.0F);
